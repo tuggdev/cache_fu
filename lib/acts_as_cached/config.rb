@@ -69,7 +69,15 @@ module ActsAsCached
 
     def setup_session_store
       ActionController::Base.session_store = :mem_cache_store
-      ActionController::CgiRequest::DEFAULT_SESSION_OPTIONS.update 'cache' => defined?(SESSION_CACHE) ? SESSION_CACHE : CACHE
+      cache = defined?(SESSION_CACHE) ? SESSION_CACHE : CACHE
+      ActionController::Session::AbstractStore::DEFAULT_OPTIONS.update(
+        :memcache_server => cache.servers, 
+        :readonly => cache.readonly?, 
+        :failover => cache.failover, 
+        :timeout => cache.timeout, 
+        :logger => cache.logger, 
+        :namespace => cache.namespace
+      )
     end
 
     def setup_fragment_store!
