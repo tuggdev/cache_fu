@@ -13,8 +13,8 @@ module ActsAsCached
       config = options['defaults']
 
       case options[RAILS_ENV]
-      when Hash   then config.update(options[RAILS_ENV]) 
-      when String then config[:disabled] = true 
+      when Hash   then config.update(options[RAILS_ENV])
+      when String then config[:disabled] = true
       end
 
       config.symbolize_keys!
@@ -26,11 +26,13 @@ module ActsAsCached
     end
 
     def setup_benchmarking!
-      Benchmarking.inject_into_logs!
+      ActiveSupport.on_load(:action_controller) do
+        include ActsAsCached::MemcacheRuntime
+      end
     end
 
     def setup_cache_store!(config)
-      config[:store] = 
+      config[:store] =
         if config[:store].nil?
           setup_memcache config
         elsif config[:store].respond_to? :constantize
@@ -54,7 +56,7 @@ module ActsAsCached
 
       CACHE.servers = Array(config.delete(:servers))
       SESSION_CACHE.servers = Array(config[:session_servers]) if config[:session_servers]
-     
+
       setup_session_store   if config[:sessions]
       setup_fragment_store! if config[:fragments]
       setup_fast_hash!      if config[:fast_hash]
@@ -71,11 +73,11 @@ module ActsAsCached
       ActionController::Base.session_store = :mem_cache_store
       cache = defined?(SESSION_CACHE) ? SESSION_CACHE : CACHE
       ActionController::Session::AbstractStore::DEFAULT_OPTIONS.update(
-        :memcache_server => cache.servers, 
-        :readonly => cache.readonly?, 
-        :failover => cache.failover, 
-        :timeout => cache.timeout, 
-        :logger => cache.logger, 
+        :memcache_server => cache.servers,
+        :readonly => cache.readonly?,
+        :failover => cache.failover,
+        :timeout => cache.timeout,
+        :logger => cache.logger,
         :namespace => cache.namespace
       )
     end
