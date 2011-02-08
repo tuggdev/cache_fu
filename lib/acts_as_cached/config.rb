@@ -54,7 +54,9 @@ module ActsAsCached
         Object.const_set :SESSION_CACHE, memcache_client(config) if config[:session_servers]
       end
 
-      CACHE.servers = Array(config.delete(:servers))
+      CACHE.respond_to?(:servers=) ? (CACHE.servers = Array(config.delete(:servers))) : CACHE.instance_variable_set('@servers', Array(config.delete(:servers)))
+      CACHE.instance_variable_get('@options')[:namespace] = config[:namespace] if CACHE.instance_variable_get('@options')
+
       SESSION_CACHE.servers = Array(config[:session_servers]) if config[:session_servers]
 
       setup_session_store   if config[:sessions]
@@ -70,6 +72,8 @@ module ActsAsCached
     end
 
     def setup_session_store
+      return # Set up session store like normal in config/application.rb
+      
       ActionController::Base.session_store = :mem_cache_store
       cache = defined?(SESSION_CACHE) ? SESSION_CACHE : CACHE
       ActionController::Session::AbstractStore::DEFAULT_OPTIONS.update(
