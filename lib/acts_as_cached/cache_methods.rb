@@ -302,4 +302,6 @@ module ActsAsCached
   end
 
   class MarshalError < StandardError; end
+  class MemCache; end
+  class MemCache::MemCacheError < StandardError; end
 end
