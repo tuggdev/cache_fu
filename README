@@ -1,6 +1,7 @@
 == cache_fu
 
 A rewrite of acts_as_cached.
+This version is only compatible with rails 3 and above.
 
 == Changes from acts_as_cached 1
 
