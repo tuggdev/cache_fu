@@ -11,16 +11,6 @@ if `which memcached`.strip.empty?
   puts "!! Check the README for help.  You can't use acts_as_cached without it.  !!"
 end
 
-puts "** Checking for memcache-client gem..."
-begin
-  require 'rubygems'
-  require 'memcache'
-rescue LoadError
-  $errors += 1
-  puts "!! Couldn't find memcache-client gem.  You can't use acts_as_cached without it. !!"
-  puts "!! $ sudo gem install memcache-client                                           !!"
-end
-
 require 'fileutils'
 def copy_file(in_file, out_file)
   puts "** Trying to copy #{File.basename(in_file)} to #{out_file}..."
