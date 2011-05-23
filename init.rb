@@ -1,1 +1,2 @@
-require 'rails/init.rb'
+require 'cache_fu'
+

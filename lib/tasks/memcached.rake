@@ -19,6 +19,19 @@ namespace :memcached do
     `killall memcached`
     puts "memcached killed"
   end
+
+  desc "Adds the cache_fu config file"
+  task :cache_fu_install do
+    defaults_dir = File.join(File.dirname(__FILE__), '../../defaults')
+
+    config_yaml  = File.join('.', 'config', 'memcached.yml')
+    default_yaml = File.join(defaults_dir, 'memcached.yml.default')
+    FileUtils.cp(default_yaml, config_yaml)
+
+    memcached_ctl = File.join('.', 'script', 'memcached_ctl')
+    default_ctl   = File.join(defaults_dir, 'memcached_ctl.default')
+    FileUtils.cp(default_ctl, memcached_ctl)
+  end
 end
 
 module ActsAsCached

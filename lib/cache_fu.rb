@@ -1,9 +1,10 @@
-require 'acts_as_cached/config'
-require 'acts_as_cached/cache_methods'
-require 'acts_as_cached/fragment_cache'
-require 'acts_as_cached/benchmarking' 
-require 'acts_as_cached/disabled'
-require 'acts_as_cached/local_cache'
+require File.dirname(__FILE__) + '/acts_as_cached/config'
+require File.dirname(__FILE__) + '/acts_as_cached/cache_methods'
+require File.dirname(__FILE__) + '/acts_as_cached/fragment_cache'
+require File.dirname(__FILE__) + '/acts_as_cached/benchmarking' 
+require File.dirname(__FILE__) + '/acts_as_cached/disabled'
+require File.dirname(__FILE__) + '/acts_as_cached/local_cache'
+require File.dirname(__FILE__) + '/acts_as_cached/railtie' if defined?(Rails::Railtie)
 
 module ActsAsCached
   @@config = {}
@@ -48,3 +49,13 @@ module ActsAsCached
   class NoCacheStore   < CacheException; end
   class NoGetMulti     < CacheException; end
 end
+
+Object.send :include, ActsAsCached::Mixin
+unless File.exists?(config_file = Rails.root.join('config', 'memcached.yml'))
+  error = "No config file found. If you used plugin version make sure you used `script/plugin install' or `rake memcached:cache_fu_install' if gem version and have memcached.yml in your config directory."
+  puts error
+  logger.error error
+  exit!
+end
+
+ActsAsCached.config = YAML.load(ERB.new(IO.read(config_file)).result)
