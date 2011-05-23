@@ -1,13 +1,13 @@
 Gem::Specification.new do |s|
   s.name = 'cache_fu'
-  s.version = '1.0.0'
+  s.version = '0.1.1'
   s.authors = [""]
   s.summary = 'Makes caching easy for ActiveRecord models'
   s.description = "This gem is kreetitech's fork (http://github.com/kreetitech/cache_fu)."
   s.email = ['']
 
-  s.files = Dir.glob('{rails,lib,recipes,test}/**/*') +
-                        %w(MIT-LICENSE README.textile)
+  s.files = Dir.glob('{rails,lib,test,defaults}/**/*') +
+                        %w(LICENSE README)
   s.homepage = 'http://github.com/kreetitech/cache_fu'
   s.require_paths = ["lib"]
 
