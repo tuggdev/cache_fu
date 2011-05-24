@@ -7,7 +7,7 @@ module ActsAsCached
     end
 
     rake_tasks do
-      load 'tasks/memcached.rb'
+      load 'tasks/memcached.rake'
     end
   end
 end
