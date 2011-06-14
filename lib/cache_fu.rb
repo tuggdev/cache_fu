@@ -1,9 +1,7 @@
 require File.dirname(__FILE__) + '/acts_as_cached/config'
 require File.dirname(__FILE__) + '/acts_as_cached/cache_methods'
-require File.dirname(__FILE__) + '/acts_as_cached/fragment_cache'
 require File.dirname(__FILE__) + '/acts_as_cached/benchmarking'
 require File.dirname(__FILE__) + '/acts_as_cached/disabled'
-require File.dirname(__FILE__) + '/acts_as_cached/local_cache'
 require File.dirname(__FILE__) + '/acts_as_cached/railtie' if defined?(Rails::Railtie)
 
 module ActsAsCached
