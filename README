@@ -3,6 +3,9 @@
 A rewrite of acts_as_cached.
 This version is only compatible with rails 3 and above.
 
+For fragment and page caching use Rails inbuilt MemCacheStore as it already provides all the functionality.
+This gem is very useful for caching in models.
+
 == Changes from acts_as_cached 1
 
 - You can no longer set a 'ttl' method on a class.  Instead,
