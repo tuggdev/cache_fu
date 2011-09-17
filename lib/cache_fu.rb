@@ -17,6 +17,7 @@ module ActsAsCached
   end
 
   module Mixin
+    puts "mixin"
     def acts_as_cached(options = {})
       extend  ClassMethods
       include InstanceMethods
@@ -26,7 +27,6 @@ module ActsAsCached
 
       options.symbolize_keys!
 
-      options[:store] ||= ActsAsCached.config[:store]
       options[:ttl]   ||= ActsAsCached.config[:ttl]
 
       # convert the find_by shorthand
@@ -42,13 +42,10 @@ module ActsAsCached
       Benchmarking.add_to self if ActsAsCached.config[:benchmarking]
     end
   end
-
-  class CacheException < StandardError; end
-  class NoCacheStore   < CacheException; end
-  class NoGetMulti     < CacheException; end
 end
 
 Rails::Application.initializer("cache_fu") do
+  puts "here"
   Object.send :include, ActsAsCached::Mixin
   unless File.exists?(config_file = Rails.root.join('config', 'memcached.yml'))
     error = "No config file found. If you used plugin version make sure you used `script/plugin install' or `rake memcached:cache_fu_install' if gem version and have memcached.yml in your config directory."
