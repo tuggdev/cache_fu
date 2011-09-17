@@ -17,7 +17,6 @@ module ActsAsCached
   end
 
   module Mixin
-    puts "mixin"
     def acts_as_cached(options = {})
       extend  ClassMethods
       include InstanceMethods
@@ -27,8 +26,6 @@ module ActsAsCached
 
       options.symbolize_keys!
 
-      options[:ttl]   ||= ActsAsCached.config[:ttl]
-
       # convert the find_by shorthand
       if find_by = options.delete(:find_by)
         options[:finder]   = "find_by_#{find_by}".to_sym
@@ -37,21 +34,12 @@ module ActsAsCached
 
       cache_config.replace  options.reject { |key,| not Config.valued_keys.include? key }
       cache_options.replace options.reject { |key,| Config.valued_keys.include? key }
-
-      Disabled.add_to self and return if ActsAsCached.config[:disabled]
-      Benchmarking.add_to self if ActsAsCached.config[:benchmarking]
     end
   end
 end
-
+ActiveRecord::Base.send :extend, ActsAsCached::Mixin
 Rails::Application.initializer("cache_fu") do
-  puts "here"
   Object.send :include, ActsAsCached::Mixin
-  unless File.exists?(config_file = Rails.root.join('config', 'memcached.yml'))
-    error = "No config file found. If you used plugin version make sure you used `script/plugin install' or `rake memcached:cache_fu_install' if gem version and have memcached.yml in your config directory."
-    puts error
-    logger.error error
-    exit!
-  end
-  ActsAsCached.config = YAML.load(ERB.new(IO.read(config_file)).result)
+  #ActsAsCached.config = YAML.load(ERB.new(IO.read(config_file)).result)
+  ActsAsCached.config = {}
 end

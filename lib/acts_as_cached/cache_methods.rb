@@ -65,7 +65,7 @@ module ActsAsCached
       missed_records = Array(fetch_cachable_data(needed_ids))
 
       # Cache the missed records
-      missed_records.each { |missed_record| missed_record.set_cache(options[:ttl]) }
+      missed_records.each { |missed_record| missed_record.set_cache(options) }
 
       # Return all records as a hash indexed by object cache_id
       (hits.values + missed_records).index_by(&:cache_id)
