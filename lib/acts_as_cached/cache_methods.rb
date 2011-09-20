@@ -196,7 +196,7 @@ module ActsAsCached
     end
 
     def cache_key(cache_id)
-      [cache_name, cache_config[:version], cache_id].compact.join(':').gsub(' ', '_')[0..(max_key_length - 1)]
+      [cache_name, cache_config[:version].class == Proc ? cache_config[:version].call : cache_config[:version], cache_id].compact.join(':').gsub(' ', '_')[0..(max_key_length - 1)]
     end
 
     def cache_store(method = nil, *args)
